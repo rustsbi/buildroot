@@ -21,9 +21,10 @@
 ################################################################################
 
 BR_CARGO_HOME = $(DL_DIR)/br-cargo-home
+BR_RUSTUP_HOME = $(HOST_DIR)/rustup
 
 PKG_COMMON_CARGO_ENV = \
-	CARGO_HOME=$(BR_CARGO_HOME)
+	CARGO_HOME=$(BR_CARGO_HOME) RUSTUP_HOME=$(BR_RUSTUP_HOME)
 
 # __CARGO_TEST_CHANNEL_OVERRIDE_DO_NOT_USE_THIS is needed to allow
 # passing the -Z target-applies-to-host, which is needed together with

@@ -132,6 +132,18 @@ config BR2_PACKAGE_HOST_RUSTC
 
 if BR2_PACKAGE_HOST_RUSTC
 
+config BR2_PACKAGE_HOST_RUSTUP_BIN
+	bool "host rustup"
+	default y
+	help
+	  This package will install rustup, and install rust toolchain 
+	  for the host and the Rust standard library for the target.
+
+comment "must choose between rustup and a selected-version rustc"
+	depends on BR2_PACKAGE_HOST_RUSTUP_BIN
+
+if !BR2_PACKAGE_HOST_RUSTUP_BIN
+
 choice
 	prompt "Rust compiler variant"
 	default BR2_PACKAGE_HOST_RUST_BIN
@@ -166,9 +178,12 @@ endchoice
 
 endif
 
+endif
+
 config BR2_PACKAGE_PROVIDES_HOST_RUSTC
 	string
 	default "host-rust" if BR2_PACKAGE_HOST_RUST
 	# Default to host-rust-bin as long as host arch supports it
-	default "host-rust-bin" if !BR2_PACKAGE_HOST_RUST
+	default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
+	default "host-rustup-bin" if BR2_PACKAGE_HOST_RUSTUP_BIN
 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS

@@ -1,0 +1,50 @@
+menuconfig BR2_TARGET_RUSTSBI
+	bool "rustsbi"
+	depends on BR2_riscv
+	# RustSBI works with at least imac support
+	depends on BR2_RISCV_ISA_RVI && BR2_RISCV_ISA_RVM && BR2_RISCV_ISA_RVA && BR2_RISCV_ISA_RVC 
+	select BR2_PACKAGE_HOST_RUSTC
+	select BR2_PACKAGE_HOST_RUSTUP_BIN
+	help
+	  RISC-V Supervisor Binary Interface (RISC-V SBI) library in Rust; 
+	  Runs on M or HS mode; 
+	  Good support for embedded Rust ecosystem. For binary download see prototyper folder.
+
+	  https://github.com/rustsbi/rustsbi
+
+if BR2_TARGET_RUSTSBI
+
+config BR2_TARGET_RUSTSBI_INSTALL_DYNAMIC_IMG
+	bool "Build & Install dynamic image"
+	default y
+	help
+		This will build and install dynamic image.
+
+config BR2_TARGET_RUSTSBI_INSTALL_JUMP_IMG
+	bool "Build & Install jump image"
+	help
+		This will build and install jump image.
+
+config BR2_TARGET_RUSTSBI_INSTALL_PAYLOAD_IMG
+	bool "Build & Install payload image"
+	help
+		This will build and install payload image.
+
+		It will use Linux Image as payload.
+
+config BR2_TARGET_RUSTSBI_USE_FDT
+	bool "Include dtb in rustsbi"
+	help
+		This will make prototyper include and use dtb given in 
+		BR2_TARGET_RUSTSBI_FDT_PATH.
+
+config BR2_TARGET_RUSTSBI_FDT_PATH
+	depends on BR2_TARGET_RUSTSBI_USE_FDT
+	string "Dtb file path"
+
+endif
+
+if BR2_TARGET_OPENSBI
+comment "RustSBI and OpenSBI may generator different file to same file name, may cuase unexpected behavior."
+	depends on BR2_TARGET_RUSTSBI && BR2_TARGET_OPENSBI
+endif
